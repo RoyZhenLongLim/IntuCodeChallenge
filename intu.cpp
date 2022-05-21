@@ -18,16 +18,16 @@ class person {
 
 const string delimit = " ";
 map<string, int> exam_type = {
-{"HMX2", 0},
-{"HM", 1},
-{"HC", 2},
-{"HP", 3},
-/*{"PMX", 4},
-{"PM", 5},
-{"PC", 6},
-{"PP", 7},
-{"Y10",8},*/
-{"HMX1", 10},
+	{"HMX2", 0},
+	{"HM", 1},
+	{"HC", 2},
+	{"HP", 3},
+	/*{"PMX", 4},
+	{"PM", 5},
+	{"PC", 6},
+	{"PP", 7},
+	{"Y10",8},*/
+	{"HMX1", 10}
 };
 
 
