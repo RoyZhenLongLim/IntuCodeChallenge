@@ -31,6 +31,7 @@ map<string, int> exam_type = {
 };
 
 // Custom operator to check if the lhs exam is 'less' than the rhs exam
+// Sort by subject (in decreasing number) then exam number then individual name when student is added to the queue
 class comp{
 	public:
 		bool operator()(person lhs, person rhs) {
