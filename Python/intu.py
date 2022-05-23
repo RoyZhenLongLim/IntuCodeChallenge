@@ -52,7 +52,12 @@ def create_student_list():
         ))
         print(f"Student {student_info[0]} inserted sitting {student_info[1]} Exam {student_info[2]}")
         student_info = input()
+
     return student_list
+
+# Print the room
+def print_room():
+    pass
 
 if __name__ == '__main__':
 
@@ -63,11 +68,44 @@ if __name__ == '__main__':
     student_list = create_student_list()
 
     # Sort the list first by subject number and second by exam number (sorts first by subject, then by exam number)
-    student_list.sort(key=lambda x: (x.subject_n, x.exam_n), reverse=True)
+    student_list.sort(key=lambda x: (x.subject_n, x.exam_n))
 
     # Output the order students will be seated in
-    for student in student_list:
-        print(f"Student Number: {student.student_n}, Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, Exam Number: {student.exam_n}")
+    print("")
+    print("Order in which students will be seated in")
+    for student in student_list.__reversed__():
+        print(
+            f"Student Number: {student.student_n}, "
+            f"Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, "
+            f"Exam Number: {student.exam_n}")
 
     # At this point, we have an ordered set of students from the exams with the shortest to the longest time in a list
+    print("")
+    # Create the room
+    # Each element in the room is a list contains everyone in the room
+    room = [[None for _ in range(room_layout[col])] for col in range(ncol)]
+
     # Assign seats based on the following algorithm
+    # Fill starting from the right-most column at the front of the room
+    curr_col = ncol - 1
+    curr_row = 0
+    # Increment, if incr is positive
+    # we are going down the column, if it is negative, we are going up the column
+    incr = 1
+    while (len(student_list) > 0):
+        # Remove a student from the back of the list
+        student = student_list.pop()
+        # TODO FIGURE OUT THIS ALGORITHM
+
+        # Once a column is filled, run the code below
+        # Move left 1 column
+        curr_col = curr_col - 1
+        # Check whether we should start filling from the top or bottom of the row
+        if (curr_row == 0):
+            # If we are at the start of the column, move down the column
+            incr = 1
+        else:
+            # If we are at the bottom of the column, move up the column starting from the bottom
+            curr_row = room_layout[curr_col]
+            incr = -1
+

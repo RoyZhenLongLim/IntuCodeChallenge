@@ -28,9 +28,10 @@ Copy `Test1.in`
 
 1. Modify the name of `TestX.in` 
 2. The first line represents the number of rows in each column
-   - An input of "1 1" means there are two columns with 1 row each
+   - An input of `1 2` means there are two columns
+   - Column A has 1 row and Column B has 2 rows.
 3. The rest of lines contain information on the student in the following format
-   - {Student Number} {Subject} {Exam Number}
+   - `{Student Number} {Subject} {Exam Number}`
 4. Make sure the bottom of the file has two empty lines
    - This is just due to implementation :p 
 
