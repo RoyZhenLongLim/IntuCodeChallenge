@@ -1,4 +1,5 @@
 # Mapping between subjects and their respective numbers
+# TODO: This is hard coding and susceptible to changes in topic
 subject_map = {
     "HMX2": 0,
     "HM": 1,
@@ -24,13 +25,8 @@ class Student:
         self.subject_n = subject_n
         self.exam_n = exam_n
 
-    def subject(self):
-        return subject_map[self.subject_n]
-
-# TODO FIGURE OUT REASONABLE CONSTANTS FOR THIS
-MAX_STUDENT = 100
-
-# Tmp constants
+# Tmp variables
+# TODO: Finish snanning in the room
 NCOL = 6
 NROW = 15
 
@@ -59,5 +55,3 @@ if __name__ == '__main__':
 
     for student in student_list:
         print(f"Student Number: {student.student_n}, Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, Exam Number: {student.exam_n}")
-
-    # Creating
