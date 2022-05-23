@@ -81,6 +81,7 @@ int main(){
 	}
 	
 	// Printing seating arrangement
+	// Seats students row by row, starting from the front
 	for(int i = 0; i<max_row; i++) {
 		for(int j = 0; j<cols; j++) {
 			if (rows[j] > i) printf("%4s", seating[i][j].name.c_str());

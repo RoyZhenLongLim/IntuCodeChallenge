@@ -18,12 +18,14 @@ subject_map = {
 
 n_to_subject = list(subject_map.keys())
 
+
 # Contains information about the students name, subject and exam number
 class Student:
     def __init__(self, student_n, subject_n, exam_n):
         self.student_n = student_n
         self.subject_n = subject_n
         self.exam_n = exam_n
+
 
 # Tmp variables
 # TODO: Finish snanning in the room
@@ -54,4 +56,7 @@ if __name__ == '__main__':
     student_list.sort(key=lambda x: (x.subject_n, x.exam_n), reverse=True)
 
     for student in student_list:
-        print(f"Student Number: {student.student_n}, Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, Exam Number: {student.exam_n}")
+        print(
+            f"Student Number: {student.student_n}, Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, Exam Number: {student.exam_n}")
+
+    # At this point, we have an ordered set of students from the exams with the shortest to longest time in a list
