@@ -55,19 +55,47 @@ def create_student_list():
 
     return student_list
 
+
+col_name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+
 # Print the room
-def print_room():
-    pass
+def print_room(room_layout, room):
+    line = ""
+    # Print column names
+    for i in range(len(room)):
+        line = line + " {:<20}".format(col_name[i])
+
+    max_row = max(room_layout)
+    # Print row by row
+    for row in range(max_row):
+        line = ""
+        for col in range(len(room)):
+            # If there is not a seat, say so
+            if row >= room_layout[col]:
+                line = line + "{:<20}".format("No Seat")
+            # If there is a seat but no student is seated there, say so
+            elif room[col][row] is None:
+                line = line + "{:<20}".format("None")
+            else:
+                student = room[col][row]
+                line = line + "{:<20}".format(f"S{student.student_n}-{n_to_subject[student.subject_n]}-E{student.exam_n}")
+
+        print(line)
+
 
 if __name__ == '__main__':
 
     # Figure out layout of the room
+    # ncol: number of columns
+    # room_layout[col] returns the number of rows in column col
     ncol, room_layout = create_layout()
 
-    # Create the list tof students
+    # Create the list of students
     student_list = create_student_list()
 
     # Sort the list first by subject number and second by exam number (sorts first by subject, then by exam number)
+    # Shortest exams are placed at the end of the list so they can be removed using the pop method
     student_list.sort(key=lambda x: (x.subject_n, x.exam_n))
 
     # Output the order students will be seated in
@@ -80,32 +108,38 @@ if __name__ == '__main__':
             f"Exam Number: {student.exam_n}")
 
     # At this point, we have an ordered set of students from the exams with the shortest to the longest time in a list
-    print("")
     # Create the room
     # Each element in the room is a list contains everyone in the room
-    room = [[None for _ in range(room_layout[col])] for col in range(ncol)]
+    # It is in the following format: room[col][row]
+    room = [[None for _ in range(max(room_layout))] for col in range(ncol)]
 
+    ###################################### Algorithm Implementation ####################################################
     # Assign seats based on the following algorithm
     # Fill starting from the right-most column at the front of the room
-    curr_col = ncol - 1
-    curr_row = 0
+    col = ncol - 1
+    row = 0
     # Increment, if incr is positive
     # we are going down the column, if it is negative, we are going up the column
     incr = 1
-    while (len(student_list) > 0):
-        # Remove a student from the back of the list
+    while len(student_list) > 0:
+        # Remove a student from the back of the list and place them in a seat
         student = student_list.pop()
-        # TODO FIGURE OUT THIS ALGORITHM
+        room[col][row] = student
+        print(f"Column:{col}, Row:{row}")
+        row = row + incr
 
-        # Once a column is filled, run the code below
-        # Move left 1 column
-        curr_col = curr_col - 1
-        # Check whether we should start filling from the top or bottom of the row
-        if (curr_row == 0):
-            # If we are at the start of the column, move down the column
-            incr = 1
-        else:
-            # If we are at the bottom of the column, move up the column starting from the bottom
-            curr_row = room_layout[curr_col]
+        # If we are going down the column and have reached the bottom of the column, move to the next column
+        if (incr == 1) and (row > room_layout[col] - 1):
+            col = col - 1
+            row = room_layout[col] - 1
             incr = -1
+        # If we are going up the column and have reached the top, move to the next column
+        elif (incr == -1) and (row < 0):
+            col = col - 1
+            row = 0
+            incr = 1
 
+    ##################################### End of Implementation ########################################################
+
+    print("")
+    print_room(room_layout, room)
