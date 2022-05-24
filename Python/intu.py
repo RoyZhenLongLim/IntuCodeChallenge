@@ -50,7 +50,8 @@ def create_student_list():
             subject_map[student_info[1]],
             int(student_info[2])
         ))
-        print(f"Student {student_info[0]} inserted sitting {student_info[1]} Exam {student_info[2]}")
+        # ! Print statement for debugging
+        # print(f"Student {student_info[0]} inserted sitting {student_info[1]} Exam {student_info[2]}")
         student_info = input()
 
     return student_list
@@ -61,15 +62,16 @@ col_name = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 # Print the room
 def print_room(room_layout, room):
-    line = ""
+    line = "{:<20}".format("")
     # Print column names
     for i in range(len(room)):
-        line = line + " {:<20}".format(col_name[i])
+        line = line + "{:<20}".format(col_name[i])
+    print(line)
 
     max_row = max(room_layout)
     # Print row by row
     for row in range(max_row):
-        line = ""
+        line = "{:<20}".format(f"Row: {row}")
         for col in range(len(room)):
             # If there is not a seat, say so
             if row >= room_layout[col]:
@@ -98,14 +100,15 @@ if __name__ == '__main__':
     # Shortest exams are placed at the end of the list so they can be removed using the pop method
     student_list.sort(key=lambda x: (x.subject_n, x.exam_n))
 
+    # ! Print statement for debugging
     # Output the order students will be seated in
-    print("")
-    print("Order in which students will be seated in")
-    for student in student_list.__reversed__():
-        print(
-            f"Student Number: {student.student_n}, "
-            f"Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, "
-            f"Exam Number: {student.exam_n}")
+    # print("")
+    # print("Order in which students will be seated in")
+    # for student in student_list.__reversed__():
+    #     print(
+    #         f"Student Number: {student.student_n}, "
+    #         f"Subject: {n_to_subject[student.subject_n]} Number {student.subject_n}, "
+    #         f"Exam Number: {student.exam_n}")
 
     # At this point, we have an ordered set of students from the exams with the shortest to the longest time in a list
     # Create the room
@@ -125,7 +128,6 @@ if __name__ == '__main__':
         # Remove a student from the back of the list and place them in a seat
         student = student_list.pop()
         room[col][row] = student
-        print(f"Column:{col}, Row:{row}")
         row = row + incr
 
         # If we are going down the column and have reached the bottom of the column, move to the next column
@@ -141,5 +143,5 @@ if __name__ == '__main__':
 
     ##################################### End of Implementation ########################################################
 
-    print("")
+    # print("")
     print_room(room_layout, room)
