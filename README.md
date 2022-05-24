@@ -20,7 +20,9 @@ python3 intu.py < Input/Test1.in > Output/Test1.out
 ```
  
 - Input is stored as a text file ending with in
+  - The input are stored in the folder Input
 - Output is stored as a text file ending with out
+  - The output are stored in the folder output
 
 ### Creating your own tests
 
@@ -35,3 +37,8 @@ Copy `Test1.in`
 4. Make sure the bottom of the file has two empty lines
    - This is just due to implementation :p 
 
+### Test Significance
+
+| Test | Significance    |
+|------|-----------------|
+| 1    | Basic Test Case |

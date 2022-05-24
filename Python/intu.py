@@ -87,6 +87,7 @@ def print_room(room_layout, room):
 
 
 if __name__ == '__main__':
+    # TODO: Take in a parameter signifying where the door is
 
     # Figure out layout of the room
     # ncol: number of columns
