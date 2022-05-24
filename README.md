@@ -22,7 +22,7 @@ python3 intu.py < Input/Test1.in > Output/Test1.out
 - Input is stored as a text file ending with in
   - The input are stored in the folder Input
 - Output is stored as a text file ending with out
-  - The output are stored in the folder output
+  - The output are stored in the folder Output
 
 ### Creating your own tests
 
