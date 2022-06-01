@@ -97,10 +97,6 @@ if __name__ == '__main__':
     # Create the list of students
     student_list = create_student_list()
 
-    # Sort the list first by subject number and second by exam number (sorts first by subject, then by exam number)
-    # Shortest exams are placed at the end of the list so they can be removed using the pop method
-    student_list.sort(key=lambda x: (x.subject_n, x.exam_n))
-
     # ! Print statement for debugging
     # Output the order students will be seated in
     # print("")
@@ -118,6 +114,11 @@ if __name__ == '__main__':
     room = [[None for _ in range(max(room_layout))] for col in range(ncol)]
 
     ###################################### Algorithm Implementation ####################################################
+
+    # Sort the list first by subject number and second by exam number (sorts first by subject, then by exam number)
+    # Shortest exams are placed at the end of the list so they can be removed using the pop method
+    student_list.sort(key=lambda x: (x.subject_n, x.exam_n))
+
     # Assign seats based on the following algorithm
     # Fill starting from the right-most column at the front of the room
     col = ncol - 1
@@ -142,7 +143,7 @@ if __name__ == '__main__':
             row = 0
             incr = 1
 
-    ##################################### End of Implementation ########################################################
+    ###################################### End of Implementation #######################################################
 
     # print("")
     print_room(room_layout, room)
