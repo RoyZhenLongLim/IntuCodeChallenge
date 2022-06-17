@@ -20,12 +20,12 @@ class person {
 		int exam_length;
 };
 
-// Exams sorted in terms of length of exam
+// Exams sorted in terms of length of exam (copy is to enable priority queue to work correctly)
 map<triple, int> exam_type = {};
-
 map<triple, int> exam_copy = {};
 
 // New operator return true if lhs > rhs i.e. lhs needs to be seated before rhs
+// (can ignore safely, just helps with prio queue. Changing this can affect priority of seating plan)
 class comp{
 	public:
 		bool operator()(person lhs, person rhs) {
@@ -37,8 +37,8 @@ class comp{
 		}
 };
 
-
 int main(){
+	// Chooses in what order students are sat
 	priority_queue<person, vector<person>, comp> students;
 	int cols, stu_num, max_row = -1, max_len = -1;
 	char door;
@@ -56,7 +56,6 @@ int main(){
 	// Scanning in student info
 	scanf("%d", &stu_num);
 	person stu[stu_num];
-	
 	for(int i = 0; i < stu_num; i++) {
 		person student;
 		scanf("%s", student.name.c_str());
@@ -77,11 +76,15 @@ int main(){
 
 	// Arranging students
 	person seating[max_row][cols];
+	bool seated[max_row][cols] = {0};
 	while (!students.empty()) {
+		// Current subject to be sat - chooses shorter exams first, and as a second layer, chooses exams with the most students
 		triple subj = make_tuple(students.top().subject.c_str(), students.top().exam_num,students.top().exam_length);
+		// If the subject does not have priority seating due to being shorter
 		if (students.top().exam_length == max_len) {
 			int max_col = -1;
 			int num = -1;
+			// Find the column with the most seats
 			for (int j = cols; j-->0;) {
 				if (remaining[j] > num) {
 					max_col = j;
@@ -89,29 +92,39 @@ int main(){
 				}
 			}
 			int k = 0;
+			// Seats all students doing the current exam who can fit in that column
 			for (int i = rows[max_col] - remaining[max_col]; i < rows[max_col] && i - (rows[max_col] - remaining[max_col]) < exam_type[subj]; i++) {
 				seating[i][max_col] = students.top();
 				students.pop();
 				k++;
 			}
+			// Subtract that many students from the number of students left doing that subject, as well as the number of seats remaining in the column
 			exam_type[subj] -= k;
 			remaining[max_col] -= k;
-		} else if (door == 'l' || door == 'L') {
+		} 
+		// If the subject has priority seating and the door is on the left
+		else if (door == 'l' || door == 'L') {
+			// Seat from the left most column starting at the front
 			for (int i = 0; i < cols && !students.empty() && exam_type[subj] > 0; i++) {
 				for (int j = 0; j < max_row && !students.empty() && exam_type[subj] > 0; j++) {
-					if (rows[i] > j) {
+					if (rows[i] > j && !seated[j][i]) {
 						seating[j][i] = students.top();
+						seated[j][i] = true;
 						students.pop();
 						exam_type[subj]--;
 						remaining[i]--;
 					}
 				}
 			}
-		} else {
+		} 
+		// If the subject has priority seating and the door is on the right, top or bottom
+		// (we prioritised seating via columns, so door at top or bottom means students sit on the side and leave from the side. We chose the right side as the default)
+		else {
 			for (int i = cols; i--> 0 && !students.empty() && exam_type[subj] > 0;) {
 				for (int j = 0; j < max_row && !students.empty() && exam_type[subj] > 0; j++) {
-					if (rows[i] > j) {
+					if (rows[i] > j && !seated[j][i]) {
 						seating[j][i] = students.top();
+						seated[j][i] = true;
 						students.pop();
 						exam_type[subj]--;
 						remaining[i]--;
@@ -120,7 +133,6 @@ int main(){
 			}
 		}
 	}
-
 
 	// Printing seating arrangement
 	// Seats students row by row, starting from the front
