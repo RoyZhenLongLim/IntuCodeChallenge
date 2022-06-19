@@ -32,6 +32,7 @@ As an example
 15 HC 2 180
 16 HP 2 180
 ```
+- For convenience, the inputs and outputs have been stored already in their corresponding directories.
 
 ### Pseudocode
 ```
