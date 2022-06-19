@@ -1,37 +1,47 @@
 #include <cstdio>
-#include <cmath>
 #include <cstdlib>
 #include <string>
 #include <vector>
 #include <queue>
 #include <map>
-#include <tuple>
 #include <cstring>
 using namespace std;
 
-typedef tuple<string, int, int> triple;
-
-class person {
+class exam {
 	public:
-		string name;
 		string subject;
 		int exam_num;
 		int exam_length;
 };
 
+// New operator for the map (just to 'order' the exams)
+// Can safely ignore, no need to change
+class comparison {
+	public:
+		bool operator()(exam lhs, exam rhs) {
+			return (strcmp(lhs.subject.c_str(),rhs.subject.c_str()) < 0 || (strcmp(lhs.subject.c_str(),rhs.subject.c_str()) == 0 && lhs.exam_num < rhs.exam_num) || (strcmp(lhs.subject.c_str(),rhs.subject.c_str()) == 0 && lhs.exam_num == rhs.exam_num && lhs.exam_length < rhs.exam_length));
+		}
+};
+
+class person {
+	public:
+		string name;
+		exam ex;
+};
+
 // Exams sorted in terms of length of exam (copy is to enable priority queue to work correctly)
-map<triple, int> exam_type = {};
-map<triple, int> exam_copy = {};
+map<exam, int, comparison> exam_type = {};
+map<exam, int, comparison> exam_copy = {};
 
 // New operator return true if lhs > rhs i.e. lhs needs to be seated before rhs
 // (can ignore safely, just helps with prio queue. Changing this can affect priority of seating plan)
 class comp{
 	public:
 		bool operator()(person lhs, person rhs) {
-			if (lhs.exam_length != rhs.exam_length) return lhs.exam_length > rhs.exam_length;
-			else if (exam_copy[make_tuple(lhs.subject.c_str(), lhs.exam_num, lhs.exam_length)] != exam_copy[make_tuple(rhs.subject.c_str(), rhs.exam_num, rhs.exam_length)]) return exam_copy[make_tuple(lhs.subject.c_str(), lhs.exam_num, lhs.exam_length)] < exam_copy[make_tuple(rhs.subject.c_str(), rhs.exam_num, rhs.exam_length)];
-			else if (strcmp(lhs.subject.c_str(), rhs.subject.c_str()) != 0) return strcmp(lhs.subject.c_str(), rhs.subject.c_str()) > 0;
-			else if (lhs.exam_num != rhs.exam_num) return lhs.exam_num > rhs.exam_num;
+			if (lhs.ex.exam_length != rhs.ex.exam_length) return lhs.ex.exam_length > rhs.ex.exam_length;
+			else if (exam_copy[lhs.ex] != exam_copy[rhs.ex]) return exam_copy[lhs.ex] < exam_copy[rhs.ex];
+			else if (strcmp(lhs.ex.subject.c_str(), rhs.ex.subject.c_str()) != 0) return strcmp(lhs.ex.subject.c_str(), rhs.ex.subject.c_str()) > 0;
+			else if (lhs.ex.exam_num != rhs.ex.exam_num) return lhs.ex.exam_num > rhs.ex.exam_num;
 			else return strcmp(lhs.name.c_str(), rhs.name.c_str()) > 0;
 		}
 };
@@ -44,8 +54,7 @@ int main(){
 	
 	// Scanning in layout of room
 	scanf("%d %c", &cols, &door);
-	int rows[cols];
-	int remaining[cols];
+	int rows[cols], remaining[cols];
 	for (int i = 0; i<cols; i++) {
 		scanf("%d", &rows[i]);
 		remaining[i] = rows[i];
@@ -57,37 +66,35 @@ int main(){
 	person stu[stu_num];
 	for(int i = 0; i < stu_num; i++) {
 		person student;
-		scanf("%s", student.name.c_str());
-		scanf("%s", student.subject.c_str());
-		scanf("%d", &student.exam_num);
-		scanf("%d", &student.exam_length);
-		exam_type[make_tuple(student.subject.c_str(), student.exam_num, student.exam_length)]++;
-		exam_copy[make_tuple(student.subject.c_str(), student.exam_num, student.exam_length)]++;
+		scanf("%s %s %d %d", student.name.c_str(), student.ex.subject.c_str(), &student.ex.exam_num, &student.ex.exam_length);
+		exam_type[student.ex]++;
+		exam_copy[student.ex]++;
 		stu[i] = student;
-		if (student.exam_length > max_len) {
-			max_len = student.exam_length;
-		}
+		if (student.ex.exam_length > max_len) max_len = student.ex.exam_length;
 	}
 	
+	// Setting up the prio queue
 	for (int i = 0 ; i < stu_num; i++) {
 		students.push(stu[i]);
 	}
 
 	// Arranging students
 	person seating[max_row][cols];
+	// Room for optimisation - could have a variable with scope outside the loop in order to enable the last seated student's position
+	// to persist between loops and save time (which is spent iterating over seats which have already been seated in). However,
+	// this makes the code harder to read, so held off on doing it for this demo
 	bool seated[max_row][cols] = {0};
 	while (!students.empty()) {
 		// Current subject to be sat - chooses shorter exams first, and as a second layer, chooses exams with the most students
-		triple subj = make_tuple(students.top().subject.c_str(), students.top().exam_num,students.top().exam_length);
+		exam subj = students.top().ex;
 		// If the subject does not have priority seating due to being shorter
-		if (students.top().exam_length == max_len) {
+		if (subj.exam_length == max_len) {
 			int max_col = -1;
-			int num = -1;
 			// Find the column with the most seats
 			for (int j = cols; j-->0;) {
-				if (remaining[j] > num) {
+				// Can remove flip the < at the end into a > if it is desired to keep more students in one column than evenly spread them amongst rows
+				if (remaining[j] > remaining[max_col] || (remaining[j] == remaining[max_col] && rows[j] < rows[max_col])) {
 					max_col = j;
-					num = remaining[j];
 				}
 			}
 			int k = 0;
@@ -104,9 +111,10 @@ int main(){
 		// If the subject has priority seating and the door is on the left
 		else if (door == 'l' || door == 'L') {
 			// Seat from the left most column starting at the front
+			// Note: could do students.top().ex == subj instead of last condition to save on space, though a bit harder to read in other places so left it out
 			for (int i = 0; i < cols && !students.empty() && exam_type[subj] > 0; i++) {
-				for (int j = 0; j < max_row && !students.empty() && exam_type[subj] > 0; j++) {
-					if (rows[i] > j && !seated[j][i]) {
+				for (int j = 0; j < rows[i] && !students.empty() && exam_type[subj] > 0; j++) {
+					if (!seated[j][i]) {
 						seating[j][i] = students.top();
 						seated[j][i] = true;
 						students.pop();
@@ -120,8 +128,8 @@ int main(){
 		// (we prioritised seating via columns, so door at top or bottom means students sit on the side and leave from the side. We chose the right side as the default)
 		else {
 			for (int i = cols; i--> 0 && !students.empty() && exam_type[subj] > 0;) {
-				for (int j = 0; j < max_row && !students.empty() && exam_type[subj] > 0; j++) {
-					if (rows[i] > j && !seated[j][i]) {
+				for (int j = 0; j < rows[i] && !students.empty() && exam_type[subj] > 0; j++) {
+					if (!seated[j][i]) {
 						seating[j][i] = students.top();
 						seated[j][i] = true;
 						students.pop();
@@ -134,7 +142,6 @@ int main(){
 	}
 
 	// Printing seating arrangement
-	// Seats students row by row, starting from the front
 	for(int i = 0; i<max_row; i++) {
 		for(int j = 0; j<cols; j++) {
 			if (rows[j] > i) printf("%4s", seating[i][j].name.c_str());
@@ -143,6 +150,6 @@ int main(){
 		}
 		printf("\n");
 	}
-	scanf("%c", &door);
+	scanf("%*c%*c");
 	return 0;
 }

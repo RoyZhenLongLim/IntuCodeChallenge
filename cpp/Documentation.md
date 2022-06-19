@@ -24,7 +24,7 @@ function main:
 - There are no two people (or exams) with the same id/name
 - No column will have any breaks in the middle of it
 - The column sizes are approximately evenly distributed (the algorithm will run if they aren't, though it will likely seat all the students in only a few columns)
-- 
+    - To counter this, one can use a separate algorithm which snakes through the front of the seats and seats everyone at the front in all the columns - however, it is less easy to guarantee students will be seated so that they can cheat off each other
 
 ### Example Data Sets + Allocations
 
