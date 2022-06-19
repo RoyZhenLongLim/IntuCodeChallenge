@@ -5,7 +5,6 @@
 #include <vector>
 #include <queue>
 #include <map>
-#include <utility>
 #include <tuple>
 #include <cstring>
 using namespace std;
@@ -144,5 +143,6 @@ int main(){
 		}
 		printf("\n");
 	}
+	scanf("%c", &door);
 	return 0;
 }
