@@ -1,6 +1,38 @@
 <h1><center>Documentation</center></h1>
 ---
 
+### How to run the program
+Run the executable. For input, it should be of the form
+```
+<num_columns> <character_for_which_side_door_is_on>
+<num_rows_in_each_col> (one for each column)
+<num_students>
+(for each student):
+<id> <subject> <exam_number> <exam_length>
+```
+As an example
+```
+5 r
+5 4 5 5 3
+16
+1 HMX2 2 180
+2 HMX2 1 180
+3 HMX2 1 180
+4 HMX1 2 150
+5 HMX1 2 150
+6 HMX1 2 150
+7 HMX1 2 150
+8 HMX1 2 150
+9 HM 2 180
+10 HM 1 180
+11 HM 1 180
+12 HM 1 180
+13 HC 2 180
+14 HC 2 180
+15 HC 2 180
+16 HP 2 180
+```
+
 ### Pseudocode
 ```
 class exam:
@@ -15,9 +47,12 @@ class person:
 function main:
     priority_queue students
     map exams
-    get num_columns
-    get position_of_door
+    get num_columns and position_of_door
     get rows[num_columns]
+    get num_students
+    get student_info[num_students]
+
+
 ```
 ### Assumptions Made
 - The door will be on one of the sides of the room
