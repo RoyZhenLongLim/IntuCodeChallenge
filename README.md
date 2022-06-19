@@ -2,36 +2,6 @@
 ---
 
 ### How to run the program
-Run the executable. For input, it should be of the form
-```
-<num_columns> <character_for_which_side_door_is_on>
-<num_rows_in_each_col> (one for each column)
-<num_students>
-(for each student):
-<id> <subject> <exam_number> <exam_length>
-```
-As an example
-```
-5 r
-5 4 5 5 3
-16
-1 HMX2 2 180
-2 HMX2 1 180
-3 HMX2 1 180
-4 HMX1 2 150
-5 HMX1 2 150
-6 HMX1 2 150
-7 HMX1 2 150
-8 HMX1 2 150
-9 HM 2 180
-10 HM 1 180
-11 HM 1 180
-12 HM 1 180
-13 HC 2 180
-14 HC 2 180
-15 HC 2 180
-16 HP 2 180
-```
 - For convenience, the inputs and outputs have been stored already in their corresponding directories.
 
 ### Pseudocode
@@ -93,6 +63,8 @@ function main:
 - No column will have any breaks in the middle of it
 - The column sizes are approximately evenly distributed (the algorithm will run if they aren't, though it will likely seat all the students in only a few columns)
     - To counter this, one can use a separate algorithm which snakes through the front of the seats and seats everyone at the front in all the columns - however, it is less easy to guarantee students will be seated so that they can cheat off each other
+- That it is ok to keep separate exam numbers of the same subject separate
+    - If that is not the case, it is a very quick fix - simply removing the exam_number from the exam class and instead adding it to the person class
 
 ### Data Structures Used
 - Classes

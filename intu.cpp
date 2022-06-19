@@ -35,6 +35,8 @@ class person {
 };
 
 // Exams sorted in terms of length of exam (copy is to enable priority queue to work correctly)
+// Note: it might be possible to remove exam_copy and make it so that if there's overflow on a subject, it gets seated
+// AFTER subjects which have more students but have yet to be sorted - I do not see why this would be desirable, so it has not been done here.
 map<exam, int, comparison> exam_type = {};
 map<exam, int, comparison> exam_copy = {};
 
