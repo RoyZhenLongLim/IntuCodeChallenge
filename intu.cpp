@@ -144,9 +144,9 @@ int main(){
 	// Printing seating arrangement
 	for(int i = 0; i<max_row; i++) {
 		for(int j = 0; j<cols; j++) {
-			if (rows[j] > i) printf("%4s", seating[i][j].name.c_str());
-			else printf("    ");
-			printf("\t");
+			if (rows[j] > i && strcmp(seating[i][j].name.c_str(),"") != 0) printf("%4s %4s %4d", seating[i][j].name.c_str(), seating[i][j].ex.subject.c_str(), seating[i][j].ex.exam_num);
+			else printf("              ");
+			printf("|\t");
 		}
 		printf("\n");
 	}
