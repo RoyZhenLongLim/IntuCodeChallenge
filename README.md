@@ -49,11 +49,43 @@ function main:
     priority_queue students
     map exams
     get num_columns and position_of_door
-    get rows[num_columns]
+    rows[num_columns], remaining[num_columns]
+    for i from 0 to num_columns step 1:
+        get num_rows[i]
     get num_students
-    get student_info[num_students]
-
-
+    for i from 0 to num_students step 1:
+        get student[i]
+        update exams with new student doing that subject
+    for i from 0 to num_students step 1:
+        push student[i] to students
+    
+    seating[max_rows][num_cols]
+    seated[max_rows][num_cols]
+    while students is not empty:
+        get top of students' subject
+        if subject's length is maximum length:
+            find column with largest remaining[col] value
+            for i from rows[max_col] - remaining[max_col] to rows[max_col] while students doing this subject still remain:
+                seating[i][max_col] = students.top
+            subtract number of students seated from that subject and column
+        else if door is on the left side:
+            for i from 0 to cols while students are to be seated doing that exam:
+                for j from 0 to rows[i] while students are to be seated doing that exam:
+                    if not seated[j][i]:
+                        seating[j][i] = student.top
+                        seated[j][i] = true
+                        subtract 1 from students doing that exam
+        else:
+            for i from cols to 0 while students are to be seated doing that exam step -1:
+                for j from 0 to rows[i] while students are to be seated doing that exam:
+                    if not seated[j][i]:
+                        seating[j][i] = student.top
+                        seated[j][i] = true
+                        subtract 1 from students doing that exam
+    for i from 0 to max_rows step 1:
+        for j from 0 to cols step 1:
+            if there is student at this seat:
+                print student details
 ```
 ### Assumptions Made
 - The door will be on one of the sides of the room
@@ -61,8 +93,6 @@ function main:
 - No column will have any breaks in the middle of it
 - The column sizes are approximately evenly distributed (the algorithm will run if they aren't, though it will likely seat all the students in only a few columns)
     - To counter this, one can use a separate algorithm which snakes through the front of the seats and seats everyone at the front in all the columns - however, it is less easy to guarantee students will be seated so that they can cheat off each other
-
-### Example Data Sets + Allocations
 
 ### Data Structures Used
 - Classes
