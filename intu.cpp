@@ -7,6 +7,11 @@
 #include <cstring>
 using namespace std;
 
+// NOTE: we kept separate exam numbers of the same subject different since it makes it
+// Easier to ensure a roughly even distribution of students in columns - if it is desirable
+// To keep them together, then exam_num can be removed from most of the cases where
+// Subjects are differentiated from each other, and just kept for admin purposes
+
 class exam {
 	public:
 		string subject;
