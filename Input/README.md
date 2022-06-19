@@ -1,5 +1,15 @@
 # Explanation of each test
-
+## Input 
+The input must be in the following format:
+```
+{num_columns} {character_for_which_side_door_is_on}
+{num_rows_in_each_col} (one for each column)
+{num_students{
+(for each student):
+{id} {subject} {exam_number} {exam_length}
+```
+## Output
+The format is `{Student Number} {Subject} {Exam Number}` in each column.
 ## Test 1
 Basic Test Case given in specs
 

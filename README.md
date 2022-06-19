@@ -89,4 +89,21 @@ function main:
             - Note: we kept a copy of said map since our comparison operator for the prio queue requires it, and we weren't sure if it would break if our map changed
 
 ### Justification of Algorithm
-We wanted to ensure groups of exams were kept together to help keep distribution of exams as easy as possible. As such, we decided to adopt an algorithm of fitting the biggest exams (by number of students) into the biggest column, in order to 
+To match the spec, we wanted to ensure that
+- shorter exams are placed near the door
+- make similar exams near each other 
+
+To do this,
+- the algorithm will start off by group by unique exam (e.g. HMX2 Exam 2 is distinct from HMX2 Exam 1)
+- the algorithm starts to seat the students with the shortest exam first which ever side the door is
+  - if the door is on the top or bottom, then the placement of the shortest exams does not matter since they will be 
+    able to walk out if the shortest exams have their own columns
+- it will then proceed to fill in the largest column with the group with the largest number of students 
+  - this ensures we have the largest number of similar exams in a contiguous manner
+- any overflow from this column is treated as another group and re-entered into the queue
+  - while there is no guarantee that the algorithm will seat the overflow near the first group, this will generally 
+    keep the overflow together
+
+Worst case: `O(max(n log n, m * n))` (roughly)
+- `n` is the number of students
+- `m` is the number of columns
