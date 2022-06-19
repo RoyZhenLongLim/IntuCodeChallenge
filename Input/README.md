@@ -10,3 +10,6 @@ Has a large amount of HMX2 students (a lot of exam 2 and exam 3 and one exam 4)
 
 ## Test 3
 Has a large variety of exams.
+
+## Test 4
+Awkward number of students (5 per exam when the columns are 4)
